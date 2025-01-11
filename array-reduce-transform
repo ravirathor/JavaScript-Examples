@@ -1,0 +1,10 @@
+var reduce = function(nums, fn, init) {
+    let val=init;
+    for(let i=0; i<nums.length;i++){
+      val= fn(val,nums[i])
+    }
+    return val;
+    
+};
+const fn = (accum,curr)=>accum+curr
+console.log(reduce([12,2,3],fn,0))
