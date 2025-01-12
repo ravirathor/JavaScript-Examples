@@ -1,0 +1,30 @@
+
+ const once= (fn) => {
+    let called = false;
+    let result;
+
+    return (...args)=> {
+        if (!called) {
+            called = true;
+            result = fn.apply(this, args);
+            return result;
+        }
+        return undefined;
+    };
+}
+
+// Example usage:
+const add = (a, b) => a + b;
+const addOnce = once(add);
+
+console.log(addOnce(2, 3)); // Output: 5
+console.log(addOnce(2, 3)); // Output: undefined
+
+
+// In this code:
+// - The `once` function takes a function `fn` as an argument.
+// - It returns a new function that checks if `fn` has been called before.
+// - If `fn` hasn't been called, it calls `fn` with the provided arguments and stores the result.
+// - On subsequent calls, it returns `undefined`.
+
+// Feel free to ask if you have any questions or need further assistance!
