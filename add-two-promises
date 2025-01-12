@@ -1,0 +1,20 @@
+// You can achieve this by using the `Promise.all` method, which takes an array of promises and returns a single promise that resolves when all of the promises in the array have resolved. Here's how you can do it:
+
+
+const sumPromises=(promise1, promise2)=> {
+    return Promise.all([promise1, promise2])
+        .then(values => {
+            const [value1, value2] = values;
+            return value1 + value2;
+        });
+}
+
+// Example usage
+const promise1 = Promise.resolve(3);
+const promise2 = Promise.resolve(5);
+
+sumPromises(promise1, promise2).then(result => {
+    console.log(result);  // Output: 8
+});
+
+// In this code, `Promise.all` waits for both `promise1` and `promise2` to resolve. Once they have both resolved, it returns an array of their resolved values. The `then` method is used to access these values, sum them, and return the result. The returned promise resolves with the sum of the two numbers.
