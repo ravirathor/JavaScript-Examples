@@ -1,0 +1,39 @@
+const timeLimitedFunction = (fn, t)=> {
+    return async (...args)=> {
+        return new Promise((resolve, reject) => {
+            const timeoutId = setTimeout(() => {
+                reject("Time Limit Exceeded");
+            }, t);
+
+            fn(...args)
+                .then(result => {
+                    clearTimeout(timeoutId);
+                    resolve(result);
+                })
+                .catch(error => {
+                    clearTimeout(timeoutId);
+                    reject(error);
+                });
+        });
+    };
+}
+
+// Example usage:
+const asyncFunction = async (a, b) => {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve(a + b);
+        }, 2000); // Simulate a 2-second delay
+    });
+};
+
+const timeLimitedAsyncFunction = timeLimitedFunction(asyncFunction, 3000);
+
+timeLimitedAsyncFunction(1, 2)
+    .then(result => console.log(result)) // Should log 3
+    .catch(error => console.log(error));
+
+timeLimitedAsyncFunction(1, 2)
+    .then(result => console.log(result)) // Should log "Time Limit Exceeded"
+    .catch(error => console.log(error));
+
