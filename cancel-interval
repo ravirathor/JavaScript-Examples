@@ -1,0 +1,32 @@
+function intervalExecution(fn, args, t) {
+    let intervalId;
+    // Function to cancel the interval execution
+    console.log(intervalId)
+    const cancelFn = () => {
+        if (intervalId) {
+            clearInterval(intervalId);
+            intervalId = null;
+        }
+    };
+
+    // Call the function immediately
+    fn(...args);
+
+    // Set the interval to execute the function every t milliseconds
+    intervalId = setInterval(() => {
+        fn(...args);
+    }, t);
+
+    return cancelFn;
+}
+
+// Example usage:
+const fn = (a, b) => console.log(a + b);
+const args = [1, 2];
+const t = 1000; // 1 second
+const cancelTimeMs = 5000; // 5 seconds
+
+const cancelFn = intervalExecution(fn, args, t);
+
+// To cancel the execution after 5 seconds
+setTimeout(cancelFn, cancelTimeMs);
