@@ -1,0 +1,41 @@
+function executeInParallel(functions) {
+    return new Promise((resolve, reject) => {
+        let results = [];
+        let completed = 0;
+        let hasRejected = false;
+        console.log(functions)
+        functions.forEach((fn, index) => {
+            fn().then(result => {
+                if (hasRejected) return;
+                results[index] = result;
+                completed += 1;
+                if (completed === functions.length) {
+                    resolve(results);
+                }
+            }).catch(error => {
+                if (!hasRejected) {
+                    hasRejected = true;
+                    reject(error);
+                }
+            });
+        });
+    });
+}
+// Example usage:
+const asyncFunction1 = () => new Promise((resolve, reject) => setTimeout(() => resolve('Result 1'), 100));
+const asyncFunction2 = () => new Promise((resolve, reject) => setTimeout(() => resolve('Result 2'), 200));
+const asyncFunction3 = () => new Promise((resolve, reject) => setTimeout(() => reject('Error in Function 3'), 150));
+
+executeInParallel([asyncFunction1, asyncFunction2, asyncFunction3])
+    .then(results => console.log('All functions resolved:', results))
+    .catch(error => console.error('One of the functions rejected:', error));
+// In this implementation:
+// - The `executeInParallel` function takes an array of asynchronous functions (`functions`) and returns a new promise.
+// - We initialize an array `results` to store the resolved values and a counter `completed` to track the number of resolved promises.
+// - We also use a flag `hasRejected` to ensure we only reject once.
+// - For each function in the array, we call it and handle its promise.
+// - If a promise resolves, we store its result in the `results` array at the corresponding index and increment the `completed` counter.
+// - If all promises resolve, we resolve the main promise with the `results` array.
+// - If any promise rejects, we reject the main promise with the reason for the first rejection.
+
+// Feel free to test it out and let me know if you have any questions!
